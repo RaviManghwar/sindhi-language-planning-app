@@ -5,12 +5,116 @@ from groq import Groq
 
 st.set_page_config(
     page_title="Language Planning: Sindhi & Regional Dialects",
-    page_icon="🗣️",
+    page_icon="🧵",
     layout="wide",
 )
 
+# ---------- THEME: inspired by Ajrak block-print textiles ----------
+# Indigo ink, madder red, and mustard ochre — the traditional Ajrak palette.
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600&display=swap');
+
+    html, body, [class*="css"], .stMarkdown, p, li, span, label {
+        font-family: 'Karla', sans-serif;
+    }
+
+    h1, h2, h3, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+        font-family: 'Fraunces', serif !important;
+        color: #F2ECDA !important;
+        letter-spacing: 0.005em;
+    }
+
+    .stApp {
+        background-color: #132A45;
+        color: #F2ECDA;
+    }
+
+    [data-testid="stSidebar"] {
+        background-color: #1C3B5C;
+        border-right: 1px solid #2E4E70;
+    }
+
+    [data-testid="stSidebar"] * {
+        color: #F2ECDA !important;
+    }
+
+    .stMarkdown, .stCaption, p, li, span {
+        color: #E7DFC8 !important;
+    }
+
+    .stButton>button, .stDownloadButton>button {
+        background-color: #A63A32;
+        color: #F2ECDA;
+        border: none;
+        border-radius: 3px;
+        font-family: 'Karla', sans-serif;
+        font-weight: 600;
+    }
+
+    .stButton>button:hover, .stDownloadButton>button:hover {
+        background-color: #D3A036;
+        color: #132A45;
+    }
+
+    [data-testid="stMetricValue"] {
+        color: #D3A036 !important;
+        font-family: 'Fraunces', serif !important;
+    }
+
+    [data-testid="stExpander"] {
+        background-color: #1C3B5C;
+        border-left: 3px solid #A63A32;
+        border-radius: 2px;
+    }
+
+    .stAlert {
+        border-radius: 2px;
+    }
+
+    .ajrak-divider {
+        height: 6px;
+        margin: 1.2rem 0 1.6rem 0;
+        background: repeating-linear-gradient(
+            45deg,
+            #A63A32 0px, #A63A32 10px,
+            #D3A036 10px, #D3A036 20px,
+            #F2ECDA 20px, #F2ECDA 30px
+        );
+        border-radius: 1px;
+        opacity: 0.9;
+    }
+
+    .hero-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 700;
+        font-size: 2.6rem;
+        color: #F2ECDA;
+        margin-bottom: 0.1rem;
+    }
+
+    .hero-subtitle {
+        font-family: 'Karla', sans-serif;
+        font-size: 1.05rem;
+        color: #D3A036;
+        font-weight: 500;
+        margin-top: 0;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+def ajrak_divider():
+    """A woven-stripe rule evoking Ajrak block-print borders, used in
+    place of a plain horizontal line between sections."""
+    st.markdown('<div class="ajrak-divider"></div>', unsafe_allow_html=True)
+
+
 # ---------- SIDEBAR NAVIGATION ----------
-st.sidebar.title("🗣️ Navigation")
+st.sidebar.markdown('<p class="hero-title" style="font-size:1.4rem;">🧵 Navigation</p>', unsafe_allow_html=True)
 section = st.sidebar.radio(
     "Go to section",
     [
@@ -67,9 +171,9 @@ st.sidebar.info(
 )
 
 # ---------- HEADER ----------
-st.title("Language Planning in Sociolinguistics")
-st.subheader("Policy Development for Regional Dialects — A Focus on Sindhi")
-st.markdown("---")
+st.markdown('<p class="hero-title">Language Planning in Sociolinguistics</p>', unsafe_allow_html=True)
+st.markdown('<p class="hero-subtitle">Policy Development for Regional Dialects — A Focus on Sindhi</p>', unsafe_allow_html=True)
+ajrak_divider()
 
 # ---------- OVERVIEW ----------
 if section == "Overview":
@@ -508,5 +612,5 @@ elif section == "Glossary":
             with st.expander(term):
                 st.write(definition)
 
-st.markdown("---")
+ajrak_divider()
 st.caption("Built with Streamlit · Sociolinguistics: Language Planning & Policy")
