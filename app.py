@@ -24,6 +24,7 @@ section = st.sidebar.radio(
         "Quick Quiz",
         "References & Further Reading",
         "Ask AI Assistant",
+        "Glossary",
     ],
 )
 
@@ -467,6 +468,45 @@ elif section == "Ask AI Assistant":
         if st.button("Clear conversation"):
             st.session_state.chat_history = []
             st.rerun()
+
+elif section == "Glossary":
+    st.header("Glossary of Key Terms")
+    st.write(
+        "Core sociolinguistics and language-planning terminology used "
+        "throughout this app."
+    )
+
+    search = st.text_input("🔍 Search glossary", "")
+
+    glossary = {
+        "Status planning": "Decisions about the official, legal, or institutional recognition given to a language — e.g., whether it is an official language, a medium of instruction, or used in courts and government.",
+        "Corpus planning": "Deliberate intervention in a language's internal form: its orthography (writing system), grammar, spelling standards, and vocabulary — including creating new terms for modern/technical concepts.",
+        "Acquisition planning": "Planning focused on how a language is taught and transmitted, including its place in school curricula, teacher training programs, and literacy campaigns.",
+        "Language shift": "The process by which a speech community gradually stops using its original (often minority) language in favor of another, usually more dominant, language — often occurring across generations.",
+        "Language maintenance": "The continued use of a language by a community despite pressure from a dominant language, often supported by strong intergenerational transmission and community institutions.",
+        "Reversing Language Shift (RLS)": "A concept developed by sociolinguist Joshua Fishman describing deliberate efforts to restore intergenerational transmission of an endangered or threatened language.",
+        "Diglossia": "A situation in a speech community where two language varieties are used, each in distinct social contexts — typically a 'high' variety for formal/official domains and a 'low' variety for everyday/informal use.",
+        "Language vitality": "A measure of how actively a language is used and transmitted, considering factors like number of speakers, intergenerational transmission, domains of use, and institutional support.",
+        "EGIDS (Expanded Graded Intergenerational Disruption Scale)": "A framework used by linguists (notably in Ethnologue) to classify a language's level of vitality or endangerment, from 'international' use down to 'extinct'.",
+        "Mother-tongue-based multilingual education (MTB-MLE)": "An educational approach where children begin schooling in their first/home language before gradually transitioning into additional languages (often the national or official language).",
+        "Linguistic imperialism": "A concept describing how dominant languages (historically often colonial languages) spread and gain prestige partly through political and economic power, often at the expense of local/regional languages.",
+        "Lingua franca": "A language systematically used to enable communication between speakers of different native languages, often for trade, administration, or education (e.g., Urdu functions this way in Pakistan).",
+        "Language nationalism": "The use of a specific language as a core symbol of national or ethnic identity, often central to political movements (e.g., the Sindhi language movement in Pakistan).",
+        "Language academy/authority": "An official institution tasked with regulating, standardizing, and promoting a language — e.g., Pakistan's Sindhi Language Authority or National Language Authority (for Urdu).",
+    }
+
+    filtered = {
+        term: definition
+        for term, definition in glossary.items()
+        if search.lower() in term.lower() or search.lower() in definition.lower()
+    }
+
+    if not filtered:
+        st.info("No matching terms found. Try a different search word.")
+    else:
+        for term, definition in sorted(filtered.items()):
+            with st.expander(term):
+                st.write(definition)
 
 st.markdown("---")
 st.caption("Built with Streamlit · Sociolinguistics: Language Planning & Policy")
