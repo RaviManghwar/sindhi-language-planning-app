@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from groq import Groq
 
 st.set_page_config(
     page_title="Language Planning: Sindhi & Regional Dialects",
@@ -22,6 +23,7 @@ section = st.sidebar.radio(
         "Conclusion & Recommendations",
         "Quick Quiz",
         "References & Further Reading",
+        "Ask AI Assistant",
     ],
 )
 
@@ -401,6 +403,70 @@ elif section == "References & Further Reading":
         not this app.*
         """
     )
+
+elif section == "Ask AI Assistant":
+    st.header("Ask AI Assistant")
+    st.write(
+        "Ask a question about language planning, Sindhi, or dialect "
+        "preservation and get an instant AI-generated answer."
+    )
+
+    api_key = st.secrets.get("GROQ_API_KEY", None)
+
+    if not api_key:
+        st.warning(
+            "No Groq API key found. Add GROQ_API_KEY to your Streamlit "
+            "secrets to enable this feature (see setup instructions)."
+        )
+    else:
+        if "chat_history" not in st.session_state:
+            st.session_state.chat_history = []
+
+        for msg in st.session_state.chat_history:
+            with st.chat_message(msg["role"]):
+                st.write(msg["content"])
+
+        user_question = st.chat_input("Ask about language planning or Sindhi...")
+
+        if user_question:
+            st.session_state.chat_history.append(
+                {"role": "user", "content": user_question}
+            )
+            with st.chat_message("user"):
+                st.write(user_question)
+
+            try:
+                client = Groq(api_key=api_key)
+                with st.chat_message("assistant"):
+                    with st.spinner("Thinking..."):
+                        response = client.chat.completions.create(
+                            model="llama-3.3-70b-versatile",
+                            messages=[
+                                {
+                                    "role": "system",
+                                    "content": (
+                                        "You are a helpful sociolinguistics "
+                                        "assistant specializing in language "
+                                        "planning, policy, and regional "
+                                        "dialect preservation, with expertise "
+                                        "on Sindhi and South Asian languages. "
+                                        "Give clear, concise, accurate answers."
+                                    ),
+                                },
+                                *st.session_state.chat_history,
+                            ],
+                        )
+                        answer = response.choices[0].message.content
+                        st.write(answer)
+                st.session_state.chat_history.append(
+                    {"role": "assistant", "content": answer}
+                )
+            except Exception as e:
+                st.error(f"Error contacting Groq API: {e}")
+
+        if st.button("Clear conversation"):
+            st.session_state.chat_history = []
+            st.rerun()
 
 st.markdown("---")
 st.caption("Built with Streamlit · Sociolinguistics: Language Planning & Policy")
