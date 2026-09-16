@@ -20,7 +20,40 @@ section = st.sidebar.radio(
         "Strategies for Preservation",
         "Case Study: Sindhi",
         "Conclusion & Recommendations",
+        "Quick Quiz",
+        "References & Further Reading",
     ],
+)
+
+SUMMARY_TEXT = """LANGUAGE PLANNING: SINDHI & REGIONAL DIALECTS — SUMMARY
+
+Language planning shapes a language's status (official recognition),
+corpus (standard form/vocabulary), and acquisition (how it is taught).
+Regional dialects like Sindhi hold official recognition in Sindh,
+Pakistan, but face real pressure from globalization (English in
+higher education, digital media) and national standardization (Urdu
+as lingua franca).
+
+Key challenges: limited use as medium of instruction beyond primary
+school, weak job-market incentives, underrepresentation in national
+media, and inconsistent intergenerational transmission in urban
+households.
+
+Key strategies: mother-tongue-based multilingual education, corpus
+modernization for technical domains, expanded media/digital presence,
+community literacy programs, and stronger enforcement of existing
+language laws.
+
+Sindhi shows that legal recognition alone does not guarantee
+vitality — sustained, coordinated investment across all planning
+levels is required.
+"""
+
+st.sidebar.download_button(
+    label="📥 Download Summary (.txt)",
+    data=SUMMARY_TEXT,
+    file_name="sindhi_language_planning_summary.txt",
+    mime="text/plain",
 )
 
 st.sidebar.markdown("---")
@@ -270,6 +303,102 @@ elif section == "Conclusion & Recommendations":
           well-supported transition into national/international languages.
         - Monitor implementation, not just legislation — ensure that legal
           recognition translates into real classroom and institutional use.
+        """
+    )
+
+# ---------- QUICK QUIZ ----------
+elif section == "Quick Quiz":
+    st.header("Quick Quiz: Test Your Understanding")
+    st.write("Check what you've learned about language planning and Sindhi.")
+
+    score = 0
+    total = 3
+
+    q1 = st.radio(
+        "1. What are the three levels of language planning?",
+        ["Status, corpus, and acquisition planning",
+         "Grammar, vocabulary, and pronunciation",
+         "Federal, provincial, and local planning"],
+        index=None, key="q1",
+    )
+    if q1:
+        if q1 == "Status, corpus, and acquisition planning":
+            st.success("Correct! These three levels interact to shape a language's vitality.")
+            score += 1
+        else:
+            st.error("Not quite — it's status, corpus, and acquisition planning.")
+
+    q2 = st.radio(
+        "2. In Pakistan, which language most often serves as the national lingua franca, competing with Sindhi for institutional use?",
+        ["Urdu", "Punjabi", "Pashto"],
+        index=None, key="q2",
+    )
+    if q2:
+        if q2 == "Urdu":
+            st.success("Correct! Urdu's role as national language creates pressure on regional languages like Sindhi.")
+            score += 1
+        else:
+            st.error("Not quite — Urdu is the national lingua franca in this context.")
+
+    q3 = st.radio(
+        "3. What does 'mother-tongue-based multilingual education' (MTB-MLE) propose?",
+        ["Teaching only in the national language from day one",
+         "Starting instruction in the child's first language, then transitioning gradually",
+         "Banning regional languages from classrooms"],
+        index=None, key="q3",
+    )
+    if q3:
+        if q3 == "Starting instruction in the child's first language, then transitioning gradually":
+            st.success("Correct! MTB-MLE eases the transition rather than forcing an abrupt language switch.")
+            score += 1
+        else:
+            st.error("Not quite — MTB-MLE starts in the mother tongue, then transitions gradually.")
+
+    if q1 and q2 and q3:
+        st.markdown(f"### Your score: {score}/{total}")
+        if score == total:
+            st.balloons()
+
+# ---------- REFERENCES ----------
+elif section == "References & Further Reading":
+    st.header("References & Further Reading")
+    st.write(
+        """
+        This app presents an illustrative overview. For rigorous academic
+        grounding, consult these foundational and Pakistan/Sindhi-specific
+        sources:
+        """
+    )
+    st.markdown(
+        """
+        **Foundational language-planning theory**
+        - Haugen, E. (1966). *Language Conflict and Language Planning: The
+          Case of Modern Norwegian*. Harvard University Press. (Introduced
+          the classic four-step language planning model.)
+        - Fishman, J. A. (1991). *Reversing Language Shift: Theoretical and
+          Empirical Foundations of Assistance to Threatened Languages*.
+          Multilingual Matters.
+
+        **Sindhi & Pakistan-specific sociolinguistics**
+        - Rahman, T. (1996). *Language and Politics in Pakistan*. Oxford
+          University Press. — The standard history of language politics in
+          Pakistan, including the Sindhi language movement.
+        - Rahman, T. (2006). "Language Policy, Multilingualism and Language
+          Vitality in Pakistan." In *Trends in Linguistics Studies and
+          Monographs*, Vol. 175.
+        - Pathan, H., Shah, S., Lohar, S., Khoso, A., & Memon, S. (2018).
+          "Language Policy and Its Consequences on Sindhi Language
+          Teaching in Sindh, Pakistan." *International Journal of English
+          Linguistics*, 8(5).
+
+        **International frameworks**
+        - UNESCO. *Atlas of the World's Languages in Danger* — a reference
+          tool for assessing language vitality and endangerment globally.
+
+        ---
+        *Note: This app's content is an educational summary for coursework
+        purposes. Always cite the original sources above in academic work,
+        not this app.*
         """
     )
 
