@@ -73,6 +73,36 @@ st.markdown(
         border-radius: 2px;
     }
 
+    .block-container {
+        max-width: 1100px;
+        padding-top: 2rem;
+        margin: 0 auto;
+    }
+
+    .stButton>button:focus-visible, .stDownloadButton>button:focus-visible,
+    [role="radio"]:focus-visible {
+        outline: 2px solid #D3A036 !important;
+        outline-offset: 2px;
+    }
+
+    .hero-band {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cpath d='M36 4 L68 36 L36 68 L4 36 Z' fill='none' stroke='%23D3A036' stroke-width='1.5' opacity='0.4'/%3E%3Ccircle cx='36' cy='36' r='4' fill='%23A63A32' opacity='0.5'/%3E%3C/svg%3E");
+        background-repeat: repeat;
+        padding: 1.8rem 1.6rem 1.4rem 1.6rem;
+        border-radius: 6px;
+        border: 1px solid #2E4E70;
+        margin-bottom: 0.4rem;
+    }
+
+    @keyframes heroFade {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-title, .hero-subtitle {
+        animation: heroFade 0.7s ease-out;
+    }
+
     .ajrak-divider {
         height: 6px;
         margin: 1.2rem 0 1.6rem 0;
@@ -115,21 +145,25 @@ def ajrak_divider():
 
 # ---------- SIDEBAR NAVIGATION ----------
 st.sidebar.markdown('<p class="hero-title" style="font-size:1.4rem;">🧵 Navigation</p>', unsafe_allow_html=True)
+
+NAV_ICONS = {
+    "Overview": "📖",
+    "Language Policy Development": "🏛️",
+    "Globalization & Standardization Pressures": "🌐",
+    "Challenges to Preservation": "⚠️",
+    "Strategies for Preservation": "🧭",
+    "Case Study: Sindhi": "📍",
+    "Conclusion & Recommendations": "✅",
+    "Quick Quiz": "🧠",
+    "References & Further Reading": "📚",
+    "Ask AI Assistant": "🤖",
+    "Glossary": "📘",
+}
+
 section = st.sidebar.radio(
     "Go to section",
-    [
-        "Overview",
-        "Language Policy Development",
-        "Globalization & Standardization Pressures",
-        "Challenges to Preservation",
-        "Strategies for Preservation",
-        "Case Study: Sindhi",
-        "Conclusion & Recommendations",
-        "Quick Quiz",
-        "References & Further Reading",
-        "Ask AI Assistant",
-        "Glossary",
-    ],
+    list(NAV_ICONS.keys()),
+    format_func=lambda label: f"{NAV_ICONS[label]}  {label}",
 )
 
 SUMMARY_TEXT = """LANGUAGE PLANNING: SINDHI & REGIONAL DIALECTS — SUMMARY
@@ -171,8 +205,13 @@ st.sidebar.info(
 )
 
 # ---------- HEADER ----------
-st.markdown('<p class="hero-title">Language Planning in Sociolinguistics</p>', unsafe_allow_html=True)
-st.markdown('<p class="hero-subtitle">Policy Development for Regional Dialects — A Focus on Sindhi</p>', unsafe_allow_html=True)
+st.markdown(
+    '<div class="hero-band">'
+    '<p class="hero-title">Language Planning in Sociolinguistics</p>'
+    '<p class="hero-subtitle">Policy Development for Regional Dialects — A Focus on Sindhi</p>'
+    '</div>',
+    unsafe_allow_html=True,
+)
 ajrak_divider()
 
 # ---------- OVERVIEW ----------
