@@ -40,6 +40,31 @@ st.markdown(
         color: #F2ECDA !important;
     }
 
+    /* Native st.navigation styling — section group labels and links */
+    [data-testid="stSidebarNav"] h3,
+    [data-testid="stSidebar"] h3 {
+        font-family: 'Fraunces', serif !important;
+        color: #D3A036 !important;
+        font-size: 0.85rem !important;
+        opacity: 0.95;
+    }
+
+    [data-testid="stSidebarNav"] a {
+        border-radius: 6px;
+        padding: 0.4rem 0.6rem;
+        margin-bottom: 2px;
+        transition: background-color 0.15s ease;
+    }
+
+    [data-testid="stSidebarNav"] a:hover {
+        background-color: rgba(211, 160, 54, 0.18);
+    }
+
+    [data-testid="stSidebarNav"] a[aria-current="page"] {
+        background-color: #A63A32 !important;
+        font-weight: 600;
+    }
+
     .stMarkdown, .stCaption, p, li, span {
         color: #E7DFC8 !important;
     }
@@ -80,7 +105,7 @@ st.markdown(
     }
 
     .stButton>button:focus-visible, .stDownloadButton>button:focus-visible,
-    [role="radio"]:focus-visible {
+    [data-testid="stSidebarNav"] a:focus-visible {
         outline: 2px solid #D3A036 !important;
         outline-offset: 2px;
     }
@@ -143,79 +168,30 @@ def ajrak_divider():
     st.markdown('<div class="ajrak-divider"></div>', unsafe_allow_html=True)
 
 
-# ---------- SIDEBAR NAVIGATION ----------
-st.sidebar.markdown('<p class="hero-title" style="font-size:1.4rem;">🧵 Navigation</p>', unsafe_allow_html=True)
+def page_header():
+    """Shared hero header shown at the top of every page."""
+    st.markdown(
+        '<div class="hero-band">'
+        '<p class="hero-title">Language Planning in Sociolinguistics</p>'
+        '<p class="hero-subtitle">Policy Development for Regional Dialects — A Focus on Sindhi</p>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+    ajrak_divider()
 
-NAV_ICONS = {
-    "Overview": "📖",
-    "Language Policy Development": "🏛️",
-    "Globalization & Standardization Pressures": "🌐",
-    "Challenges to Preservation": "⚠️",
-    "Strategies for Preservation": "🧭",
-    "Case Study: Sindhi": "📍",
-    "Conclusion & Recommendations": "✅",
-    "Quick Quiz": "🧠",
-    "References & Further Reading": "📚",
-    "Ask AI Assistant": "🤖",
-    "Glossary": "📘",
-}
 
-section = st.sidebar.radio(
-    "Go to section",
-    list(NAV_ICONS.keys()),
-    format_func=lambda label: f"{NAV_ICONS[label]}  {label}",
-)
+def page_footer():
+    """Shared footer shown at the bottom of every page."""
+    ajrak_divider()
+    st.caption("Built with Streamlit · Sociolinguistics: Language Planning & Policy")
 
-SUMMARY_TEXT = """LANGUAGE PLANNING: SINDHI & REGIONAL DIALECTS — SUMMARY
 
-Language planning shapes a language's status (official recognition),
-corpus (standard form/vocabulary), and acquisition (how it is taught).
-Regional dialects like Sindhi hold official recognition in Sindh,
-Pakistan, but face real pressure from globalization (English in
-higher education, digital media) and national standardization (Urdu
-as lingua franca).
+# =========================================================
+# PAGE FUNCTIONS
+# =========================================================
 
-Key challenges: limited use as medium of instruction beyond primary
-school, weak job-market incentives, underrepresentation in national
-media, and inconsistent intergenerational transmission in urban
-households.
-
-Key strategies: mother-tongue-based multilingual education, corpus
-modernization for technical domains, expanded media/digital presence,
-community literacy programs, and stronger enforcement of existing
-language laws.
-
-Sindhi shows that legal recognition alone does not guarantee
-vitality — sustained, coordinated investment across all planning
-levels is required.
-"""
-
-st.sidebar.download_button(
-    label="📥 Download Summary (.txt)",
-    data=SUMMARY_TEXT,
-    file_name="sindhi_language_planning_summary.txt",
-    mime="text/plain",
-)
-
-st.sidebar.markdown("---")
-st.sidebar.info(
-    "This app presents a language-planning analysis of regional dialect "
-    "policy, with a focus on Sindhi, in the context of globalization and "
-    "standardization pressures."
-)
-
-# ---------- HEADER ----------
-st.markdown(
-    '<div class="hero-band">'
-    '<p class="hero-title">Language Planning in Sociolinguistics</p>'
-    '<p class="hero-subtitle">Policy Development for Regional Dialects — A Focus on Sindhi</p>'
-    '</div>',
-    unsafe_allow_html=True,
-)
-ajrak_divider()
-
-# ---------- OVERVIEW ----------
-if section == "Overview":
+def render_overview():
+    page_header()
     st.header("Overview")
     st.write(
         """
@@ -270,9 +246,11 @@ if section == "Overview":
         }
     )
     st.map(map_data, latitude="lat", longitude="lon", size=100)
+    page_footer()
 
-# ---------- POLICY DEVELOPMENT ----------
-elif section == "Language Policy Development":
+
+def render_policy():
+    page_header()
     st.header("Language Policy Development")
     st.write(
         """
@@ -300,15 +278,13 @@ elif section == "Language Policy Development":
         symbolic rather than functional recognition.
         """
     )
+    page_footer()
 
-# ---------- GLOBALIZATION ----------
-elif section == "Globalization & Standardization Pressures":
+
+def render_globalization():
+    page_header()
     st.header("Globalization & Standardization Pressures")
-    st.write(
-        """
-        Regional dialects face two overlapping pressures:
-        """
-    )
+    st.write("Regional dialects face two overlapping pressures:")
     tab1, tab2 = st.tabs(["Globalization", "National Standardization"])
 
     with tab1:
@@ -341,9 +317,11 @@ elif section == "Globalization & Standardization Pressures":
               favors the national standard.
             """
         )
+    page_footer()
 
-# ---------- CHALLENGES ----------
-elif section == "Challenges to Preservation":
+
+def render_challenges():
+    page_header()
     st.header("Challenges to Preservation")
     challenges = {
         "Educational Domain": "Limited use of Sindhi as a medium of instruction beyond primary levels; weak transition support into higher education.",
@@ -356,9 +334,11 @@ elif section == "Challenges to Preservation":
     for title, desc in challenges.items():
         with st.expander(title):
             st.write(desc)
+    page_footer()
 
-# ---------- STRATEGIES ----------
-elif section == "Strategies for Preservation":
+
+def render_strategies():
+    page_header()
     st.header("Strategies for Preservation")
     st.write("Sociolinguistic literature suggests several strategies:")
 
@@ -381,9 +361,11 @@ elif section == "Strategies for Preservation":
         st.markdown(f"**• {title}**")
         st.write(desc)
         st.markdown("")
+    page_footer()
 
-# ---------- CASE STUDY ----------
-elif section == "Case Study: Sindhi":
+
+def render_case_study():
+    page_header()
     st.header("Case Study: Sindhi Language Planning")
     st.write(
         """
@@ -425,9 +407,11 @@ elif section == "Case Study: Sindhi":
         "sustained investment across status, corpus, and acquisition "
         "planning is required."
     )
+    page_footer()
 
-# ---------- CONCLUSION ----------
-elif section == "Conclusion & Recommendations":
+
+def render_conclusion():
+    page_header()
     st.header("Conclusion & Recommendations")
     st.write(
         """
@@ -451,9 +435,11 @@ elif section == "Conclusion & Recommendations":
           recognition translates into real classroom and institutional use.
         """
     )
+    page_footer()
 
-# ---------- QUICK QUIZ ----------
-elif section == "Quick Quiz":
+
+def render_quiz():
+    page_header()
     st.header("Quick Quiz: Test Your Understanding")
     st.write("Check what you've learned about language planning and Sindhi.")
 
@@ -504,9 +490,11 @@ elif section == "Quick Quiz":
         st.markdown(f"### Your score: {score}/{total}")
         if score == total:
             st.balloons()
+    page_footer()
 
-# ---------- REFERENCES ----------
-elif section == "References & Further Reading":
+
+def render_references():
+    page_header()
     st.header("References & Further Reading")
     st.write(
         """
@@ -547,8 +535,11 @@ elif section == "References & Further Reading":
         not this app.*
         """
     )
+    page_footer()
 
-elif section == "Ask AI Assistant":
+
+def render_ai_assistant():
+    page_header()
     st.header("Ask AI Assistant")
     st.write(
         "Ask a question about language planning, Sindhi, or dialect "
@@ -611,8 +602,11 @@ elif section == "Ask AI Assistant":
         if st.button("Clear conversation"):
             st.session_state.chat_history = []
             st.rerun()
+    page_footer()
 
-elif section == "Glossary":
+
+def render_glossary():
+    page_header()
     st.header("Glossary of Key Terms")
     st.write(
         "Core sociolinguistics and language-planning terminology used "
@@ -650,6 +644,74 @@ elif section == "Glossary":
         for term, definition in sorted(filtered.items()):
             with st.expander(term):
                 st.write(definition)
+    page_footer()
 
-ajrak_divider()
-st.caption("Built with Streamlit · Sociolinguistics: Language Planning & Policy")
+
+# =========================================================
+# SIDEBAR: shared elements + native grouped navigation
+# =========================================================
+
+SUMMARY_TEXT = """LANGUAGE PLANNING: SINDHI & REGIONAL DIALECTS — SUMMARY
+
+Language planning shapes a language's status (official recognition),
+corpus (standard form/vocabulary), and acquisition (how it is taught).
+Regional dialects like Sindhi hold official recognition in Sindh,
+Pakistan, but face real pressure from globalization (English in
+higher education, digital media) and national standardization (Urdu
+as lingua franca).
+
+Key challenges: limited use as medium of instruction beyond primary
+school, weak job-market incentives, underrepresentation in national
+media, and inconsistent intergenerational transmission in urban
+households.
+
+Key strategies: mother-tongue-based multilingual education, corpus
+modernization for technical domains, expanded media/digital presence,
+community literacy programs, and stronger enforcement of existing
+language laws.
+
+Sindhi shows that legal recognition alone does not guarantee
+vitality — sustained, coordinated investment across all planning
+levels is required.
+"""
+
+st.sidebar.markdown('<p class="hero-title" style="font-size:1.4rem;">🧵 Sindhi Language Planning</p>', unsafe_allow_html=True)
+st.sidebar.caption("A sociolinguistics analysis")
+
+pages = {
+    "Learn": [
+        st.Page(render_overview, title="Overview", icon="📖", default=True),
+        st.Page(render_policy, title="Policy Development", icon="🏛️"),
+        st.Page(render_globalization, title="Globalization Pressures", icon="🌐"),
+        st.Page(render_challenges, title="Challenges", icon="⚠️"),
+        st.Page(render_strategies, title="Strategies", icon="🧭"),
+        st.Page(render_case_study, title="Case Study: Sindhi", icon="📍"),
+        st.Page(render_conclusion, title="Conclusion", icon="✅"),
+    ],
+    "Explore": [
+        st.Page(render_quiz, title="Quick Quiz", icon="🧠"),
+        st.Page(render_glossary, title="Glossary", icon="📘"),
+    ],
+    "Reference & Tools": [
+        st.Page(render_references, title="References", icon="📚"),
+        st.Page(render_ai_assistant, title="Ask AI Assistant", icon="🤖"),
+    ],
+}
+
+pg = st.navigation(pages)
+
+st.sidebar.markdown("---")
+st.sidebar.download_button(
+    label="📥 Download Summary (.txt)",
+    data=SUMMARY_TEXT,
+    file_name="sindhi_language_planning_summary.txt",
+    mime="text/plain",
+)
+st.sidebar.markdown("---")
+st.sidebar.info(
+    "This app presents a language-planning analysis of regional dialect "
+    "policy, with a focus on Sindhi, in the context of globalization and "
+    "standardization pressures."
+)
+
+pg.run()
