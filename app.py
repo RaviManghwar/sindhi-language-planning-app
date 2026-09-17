@@ -296,14 +296,53 @@ def render_overview():
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("### Where Sindhi is Spoken")
+    st.caption("Click a marker to learn more about that city.")
     map_data = pd.DataFrame(
         {
             "lat": [25.3960, 24.8607, 27.7244],
             "lon": [68.3578, 67.0011, 68.8358],
             "city": ["Hyderabad, Sindh", "Karachi, Sindh", "Sukkur, Sindh"],
+            "blurb": [
+                "A historic center of Sindhi language and literature — "
+                "the Sindhi language movement of the 1970s, which pushed "
+                "for Sindhi's official provincial status, was centered here.",
+                "Pakistan's largest and most linguistically diverse city. "
+                "Sindhi remains a major mother tongue, especially in older "
+                "and interior neighborhoods, alongside Urdu and other "
+                "migrant-community languages.",
+                "A key trade and administrative hub in northern Sindh, "
+                "historically important for Sindhi-language print media "
+                "and publishing.",
+            ],
         }
     )
-    st.map(map_data, latitude="lat", longitude="lon", size=100)
+    map_fig = px.scatter_mapbox(
+        map_data,
+        lat="lat",
+        lon="lon",
+        hover_name="city",
+        custom_data=["city", "blurb"],
+        zoom=5.2,
+        height=420,
+    )
+    map_fig.update_traces(marker=dict(size=16, color="#A63A32"))
+    map_fig.update_layout(
+        mapbox_style="open-street-map",
+        margin=dict(l=0, r=0, t=0, b=0),
+    )
+    map_event = st.plotly_chart(
+        map_fig,
+        use_container_width=True,
+        key="sindhi_map",
+        on_select="rerun",
+    )
+
+    if map_event and map_event.selection and map_event.selection.points:
+        point = map_event.selection.points[0]
+        clicked_city, clicked_blurb = point["customdata"]
+        st.info(f"**{clicked_city}** — {clicked_blurb}")
+    else:
+        st.caption("No marker selected yet.")
     page_footer()
 
 
@@ -663,6 +702,65 @@ def render_ai_assistant():
     page_footer()
 
 
+def render_comparison():
+    page_header()
+    st.header("Language Comparison Tool")
+    st.write(
+        "Compare Sindhi against Pakistan's other major regional languages "
+        "using 2023 census mother-tongue figures and provincial policy status."
+    )
+
+    LANGUAGE_DATA = {
+        "Punjabi": {"pct": 37.0, "region": "Punjab", "official_status": "Not an official provincial language; limited use in schooling despite being the largest mother tongue."},
+        "Pashto": {"pct": 18.0, "region": "Khyber Pakhtunkhwa", "official_status": "Provincial language of KP; used in some primary education."},
+        "Sindhi": {"pct": 14.0, "region": "Sindh", "official_status": "Official provincial language of Sindh; medium of instruction through primary school."},
+        "Saraiki": {"pct": 12.0, "region": "Southern Punjab", "official_status": "Recognized regionally but not an official provincial language."},
+        "Urdu": {"pct": 9.0, "region": "National (lingua franca)", "official_status": "National and co-official language; dominant in administration and media nationwide."},
+        "Balochi": {"pct": 3.0, "region": "Balochistan", "official_status": "One of Balochistan's provincial languages, alongside Pashto and Brahui."},
+    }
+
+    selected = st.multiselect(
+        "Choose languages to compare",
+        list(LANGUAGE_DATA.keys()),
+        default=["Sindhi", "Punjabi", "Pashto", "Urdu"],
+    )
+
+    if not selected:
+        st.info("Select at least one language above to see the comparison.")
+    else:
+        compare_df = pd.DataFrame(
+            {
+                "Language": selected,
+                "Share of population (%)": [LANGUAGE_DATA[lang]["pct"] for lang in selected],
+            }
+        )
+        fig = px.bar(
+            compare_df,
+            x="Language",
+            y="Share of population (%)",
+            color="Language",
+            text="Share of population (%)",
+        )
+        fig.update_traces(textposition="outside")
+        fig.update_layout(showlegend=False)
+        st.plotly_chart(fig, use_container_width=True)
+        st.caption("Source: 2023 Pakistan Bureau of Statistics census, mother-tongue share of national population.")
+
+        st.markdown("### Policy status at a glance")
+        for lang in selected:
+            info = LANGUAGE_DATA[lang]
+            with st.expander(f"{lang} — {info['pct']}% · {info['region']}"):
+                st.write(info["official_status"])
+
+    st.markdown("---")
+    st.caption(
+        "Note: figures reflect mother-tongue share of Pakistan's national "
+        "population, not regional concentration — e.g. Sindhi speakers are "
+        "far denser within Sindh itself than the national 14% suggests."
+    )
+    page_footer()
+
+
 def render_glossary():
     page_header()
     st.header("Glossary of Key Terms")
@@ -745,6 +843,7 @@ PAGES = {
     "🧭 Strategies": render_strategies,
     "📍 Case Study: Sindhi": render_case_study,
     "✅ Conclusion": render_conclusion,
+    "🗺️ Language Comparison": render_comparison,
     "🧠 Quick Quiz": render_quiz,
     "📘 Glossary": render_glossary,
     "📚 References": render_references,
