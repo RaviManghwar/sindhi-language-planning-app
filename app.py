@@ -40,44 +40,35 @@ st.markdown(
         color: #F2ECDA !important;
     }
 
-    /* Native st.navigation styling — confirmed via Streamlit's own
-       data-testid for individual nav links: "stSidebarNavLink" */
-    [data-testid="stSidebarNav"] span,
-    [data-testid="stSidebarNav"] p {
-        font-family: 'Karla', sans-serif !important;
-        color: #D3A036 !important;
+    /* Sidebar radio list — styled as a clean bullet-point nav.
+       Uses only standard HTML elements (label, div) inside the sidebar,
+       not fragile internal Streamlit component names, so it stays
+       reliable across Streamlit versions. */
+    [data-testid="stSidebar"] [role="radiogroup"] {
+        gap: 2px;
     }
 
-    [data-testid="stSidebarNavLink"] {
-        border-radius: 6px !important;
-        padding: 0.5rem 0.7rem !important;
-        margin: 2px 0 !important;
-        transition: background-color 0.15s ease, color 0.15s ease !important;
+    [data-testid="stSidebar"] [role="radiogroup"] label {
+        border-radius: 6px;
+        padding: 0.5rem 0.6rem;
+        transition: background-color 0.15s ease;
+        cursor: pointer;
     }
 
-    [data-testid="stSidebarNavLink"] * {
-        color: #F2ECDA !important;
+    [data-testid="stSidebar"] [role="radiogroup"] label:hover {
+        background-color: rgba(211, 160, 54, 0.22);
     }
 
-    [data-testid="stSidebarNavLink"]:hover {
-        background-color: rgba(211, 160, 54, 0.22) !important;
+    /* The selected radio's circle already picks up primaryColor
+       (madder red) automatically from .streamlit/config.toml. This
+       adds a matching highlight to the whole row for the selected item. */
+    [data-testid="stSidebar"] [role="radiogroup"] label:has(input:checked) {
+        background-color: rgba(166, 58, 50, 0.55);
     }
 
-    [data-testid="stSidebarNavLink"][aria-current="page"],
-    [data-testid="stSidebarNavLink"].st-emotion-cache-selected,
-    [data-testid="stSidebarNavLink"][aria-selected="true"] {
-        background-color: #A63A32 !important;
-    }
-
-    [data-testid="stSidebarNavLink"][aria-current="page"] *,
-    [data-testid="stSidebarNavLink"][aria-selected="true"] * {
-        color: #F2ECDA !important;
+    [data-testid="stSidebar"] [role="radiogroup"] label:has(input:checked) p {
         font-weight: 700 !important;
-    }
-
-    [data-testid="stSidebarNavSeparator"] {
-        border-color: #2E4E70 !important;
-        margin: 0.6rem 0 !important;
+        color: #F2ECDA !important;
     }
 
     .stMarkdown, .stCaption, p, li, span {
@@ -120,7 +111,7 @@ st.markdown(
     }
 
     .stButton>button:focus-visible, .stDownloadButton>button:focus-visible,
-    [data-testid="stSidebarNavLink"]:focus-visible {
+    [data-testid="stSidebar"] [role="radio"]:focus-visible {
         outline: 2px solid #D3A036 !important;
         outline-offset: 2px;
     }
@@ -692,28 +683,23 @@ levels is required.
 
 st.sidebar.markdown('<p class="hero-title" style="font-size:1.4rem;">🧵 Sindhi Language Planning</p>', unsafe_allow_html=True)
 st.sidebar.caption("A sociolinguistics analysis")
+st.sidebar.markdown("---")
 
-pages = {
-    "Learn": [
-        st.Page(render_overview, title="Overview", icon="📖", default=True),
-        st.Page(render_policy, title="Policy Development", icon="🏛️"),
-        st.Page(render_globalization, title="Globalization Pressures", icon="🌐"),
-        st.Page(render_challenges, title="Challenges", icon="⚠️"),
-        st.Page(render_strategies, title="Strategies", icon="🧭"),
-        st.Page(render_case_study, title="Case Study: Sindhi", icon="📍"),
-        st.Page(render_conclusion, title="Conclusion", icon="✅"),
-    ],
-    "Explore": [
-        st.Page(render_quiz, title="Quick Quiz", icon="🧠"),
-        st.Page(render_glossary, title="Glossary", icon="📘"),
-    ],
-    "Reference & Tools": [
-        st.Page(render_references, title="References", icon="📚"),
-        st.Page(render_ai_assistant, title="Ask AI Assistant", icon="🤖"),
-    ],
+PAGES = {
+    "📖 Overview": render_overview,
+    "🏛️ Policy Development": render_policy,
+    "🌐 Globalization Pressures": render_globalization,
+    "⚠️ Challenges": render_challenges,
+    "🧭 Strategies": render_strategies,
+    "📍 Case Study: Sindhi": render_case_study,
+    "✅ Conclusion": render_conclusion,
+    "🧠 Quick Quiz": render_quiz,
+    "📘 Glossary": render_glossary,
+    "📚 References": render_references,
+    "🤖 Ask AI Assistant": render_ai_assistant,
 }
 
-pg = st.navigation(pages)
+choice = st.sidebar.radio("Go to section", list(PAGES.keys()), label_visibility="collapsed")
 
 st.sidebar.markdown("---")
 st.sidebar.download_button(
@@ -729,4 +715,4 @@ st.sidebar.info(
     "standardization pressures."
 )
 
-pg.run()
+PAGES[choice]()
