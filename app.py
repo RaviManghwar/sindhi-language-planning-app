@@ -162,6 +162,58 @@ st.markdown(
         font-weight: 500;
         margin-top: 0;
     }
+
+    /* ---------- RESPONSIVE: tablet & mobile ---------- */
+    @media (max-width: 768px) {
+        .block-container {
+            padding-top: 1.2rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .hero-band {
+            padding: 1.1rem 1rem 0.9rem 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .hero-title {
+            font-size: 1.55rem;
+            line-height: 1.25;
+        }
+
+        .hero-subtitle {
+            font-size: 0.85rem;
+            line-height: 1.35;
+        }
+
+        .ajrak-divider {
+            height: 4px;
+            margin: 0.8rem 0 1.1rem 0;
+        }
+
+        [data-testid="stSidebar"] [role="radiogroup"] label {
+            padding: 0.65rem 0.6rem;
+        }
+
+        /* Full-width, thumb-friendly buttons on touch screens */
+        .stButton>button, .stDownloadButton>button {
+            width: 100%;
+        }
+
+        [data-testid="stMetricValue"] {
+            font-size: 1.3rem !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 1.3rem;
+        }
+
+        .hero-band {
+            background-size: 48px 48px;
+        }
+    }
     </style>
     """,
     unsafe_allow_html=True,
