@@ -40,29 +40,44 @@ st.markdown(
         color: #F2ECDA !important;
     }
 
-    /* Native st.navigation styling — section group labels and links */
-    [data-testid="stSidebarNav"] h3,
-    [data-testid="stSidebar"] h3 {
-        font-family: 'Fraunces', serif !important;
+    /* Native st.navigation styling — confirmed via Streamlit's own
+       data-testid for individual nav links: "stSidebarNavLink" */
+    [data-testid="stSidebarNav"] span,
+    [data-testid="stSidebarNav"] p {
+        font-family: 'Karla', sans-serif !important;
         color: #D3A036 !important;
-        font-size: 0.85rem !important;
-        opacity: 0.95;
     }
 
-    [data-testid="stSidebarNav"] a {
-        border-radius: 6px;
-        padding: 0.4rem 0.6rem;
-        margin-bottom: 2px;
-        transition: background-color 0.15s ease;
+    [data-testid="stSidebarNavLink"] {
+        border-radius: 6px !important;
+        padding: 0.5rem 0.7rem !important;
+        margin: 2px 0 !important;
+        transition: background-color 0.15s ease, color 0.15s ease !important;
     }
 
-    [data-testid="stSidebarNav"] a:hover {
-        background-color: rgba(211, 160, 54, 0.18);
+    [data-testid="stSidebarNavLink"] * {
+        color: #F2ECDA !important;
     }
 
-    [data-testid="stSidebarNav"] a[aria-current="page"] {
+    [data-testid="stSidebarNavLink"]:hover {
+        background-color: rgba(211, 160, 54, 0.22) !important;
+    }
+
+    [data-testid="stSidebarNavLink"][aria-current="page"],
+    [data-testid="stSidebarNavLink"].st-emotion-cache-selected,
+    [data-testid="stSidebarNavLink"][aria-selected="true"] {
         background-color: #A63A32 !important;
-        font-weight: 600;
+    }
+
+    [data-testid="stSidebarNavLink"][aria-current="page"] *,
+    [data-testid="stSidebarNavLink"][aria-selected="true"] * {
+        color: #F2ECDA !important;
+        font-weight: 700 !important;
+    }
+
+    [data-testid="stSidebarNavSeparator"] {
+        border-color: #2E4E70 !important;
+        margin: 0.6rem 0 !important;
     }
 
     .stMarkdown, .stCaption, p, li, span {
@@ -105,7 +120,7 @@ st.markdown(
     }
 
     .stButton>button:focus-visible, .stDownloadButton>button:focus-visible,
-    [data-testid="stSidebarNav"] a:focus-visible {
+    [data-testid="stSidebarNavLink"]:focus-visible {
         outline: 2px solid #D3A036 !important;
         outline-offset: 2px;
     }
