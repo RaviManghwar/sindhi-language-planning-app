@@ -293,7 +293,7 @@ def render_overview():
         barmode="group",
         labels={"value": "Relative usage (%)", "variable": "Language"},
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
     st.markdown("### Where Sindhi is Spoken")
     st.caption("Click a marker to learn more about that city.")
@@ -316,7 +316,7 @@ def render_overview():
             ],
         }
     )
-    map_fig = px.scatter_mapbox(
+    map_fig = px.scatter_map(
         map_data,
         lat="lat",
         lon="lon",
@@ -324,15 +324,13 @@ def render_overview():
         custom_data=["city", "blurb"],
         zoom=5.2,
         height=420,
+        map_style="open-street-map",
     )
     map_fig.update_traces(marker=dict(size=16, color="#A63A32"))
-    map_fig.update_layout(
-        mapbox_style="open-street-map",
-        margin=dict(l=0, r=0, t=0, b=0),
-    )
+    map_fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
     map_event = st.plotly_chart(
         map_fig,
-        use_container_width=True,
+        width='stretch',
         key="sindhi_map",
         on_select="rerun",
     )
@@ -743,7 +741,7 @@ def render_comparison():
         )
         fig.update_traces(textposition="outside")
         fig.update_layout(showlegend=False)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
         st.caption("Source: 2023 Pakistan Bureau of Statistics census, mother-tongue share of national population.")
 
         st.markdown("### Policy status at a glance")
